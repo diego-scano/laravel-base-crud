@@ -25,7 +25,7 @@ class BeerController extends Controller
      */
     public function create()
     {
-        //
+        return view('beers.create');
     }
 
     /**
@@ -36,7 +36,25 @@ class BeerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+          'name' => 'required',
+          'typology' => 'required',
+          'color' => 'required',
+          'alcohol_content' => 'required',
+          'nation' => 'required',
+          'producer' => 'required',
+          'image' => 'required|url'
+        ]);
+
+        $data = $request->all();
+
+        $beer = new Beer();
+        $beer->fill($data);
+        $beer->save();
+
+        $beerStored = Beer::orderBy('id', 'desc')->first();
+
+        return redirect()->route('beers.show', $beerStored);
     }
 
     /**
