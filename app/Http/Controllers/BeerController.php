@@ -36,15 +36,7 @@ class BeerController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-          'name' => 'required',
-          'typology' => 'required',
-          'color' => 'required',
-          'alcohol_content' => 'required',
-          'nation' => 'required',
-          'producer' => 'required',
-          'image' => 'required|url'
-        ]);
+        $this->validateForm($request);
 
         $data = $request->all();
 
@@ -60,7 +52,7 @@ class BeerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $beer
+     * @param  Beer  $beer
      * @return \Illuminate\Http\Response
      */
     public function show(Beer $beer)
@@ -71,24 +63,28 @@ class BeerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Beer  $beer
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Beer $beer)
     {
-        //
+        return view('beers.edit', compact('beer'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Beer  $beer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Beer $beer)
     {
-        //
+        $this->validateForm($request);
+        $data = $request->all();
+        $beer->update($data);
+
+        return redirect()->route('beers.index');
     }
 
     /**
@@ -97,8 +93,24 @@ class BeerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Beer $beer)
     {
-        //
+
+        $beer->delete();
+
+        return redirect()->route('beers.index');
+    }
+
+    protected function validateForm(Request $request)
+    {
+      $request->validate([
+        'name' => 'required',
+        'typology' => 'required',
+        'color' => 'required',
+        'alcohol_content' => 'required|numeric|between:0,99.9',
+        'nation' => 'required',
+        'producer' => 'required',
+        'image' => 'required|url'
+      ]);
     }
 }

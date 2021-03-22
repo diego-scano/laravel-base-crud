@@ -21,9 +21,6 @@
           <li class="list-group-item">{{$beer->nation}}</li>
           <li class="list-group-item">{{$beer->producer}}</li>
         </ul>
-        <div class="card-body">
-          <button type="button" class="btn btn-warning">Edit</button>
-        </div>
       </div>
     </div>
 

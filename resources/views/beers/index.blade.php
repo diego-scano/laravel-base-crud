@@ -20,19 +20,39 @@
             <th scope="col">Nation</th>
             <th scope="col">Producer</th>
             <th scope="col">Image</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
           @foreach ($beers as $beer)
             <tr>
               <th scope="row">{{$beer->id}}</th>
-              <td><a href="{{route('beers.show', compact('beer'))}}">{{strtoupper($beer->name)}}</a></td>
+              <td>{{strtoupper($beer->name)}}</td>
               <td>{{$beer->typology}}</td>
               <td>{{$beer->color}}</td>
               <td>{{$beer->alcohol_content}}</td>
               <td>{{$beer->nation}}</td>
               <td>{{$beer->producer}}</td>
               <td><img src="{{$beer->image}}" width="150"></td>
+              <td>
+                <a href="{{route('beers.show', compact('beer'))}}">
+                  <button type="button" class="btn btn-success action">
+                    <i class="far fa-eye"></i>
+                  </button>
+                </a><br>
+                <a href="{{route('beers.edit', compact('beer'))}}">
+                  <button type="button" class="btn btn-primary action">
+                    <i class="fa fa-pen"></i>
+                  </button>
+                </a><br>
+                <form action="{{route('beers.destroy', compact('beer'))}}" method="post">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="btn btn-danger action">
+                    <i class="fa fa-meteor"></i>
+                  </button>
+                </form>
+              </td>
             </tr>
           @endforeach
         </tbody>
